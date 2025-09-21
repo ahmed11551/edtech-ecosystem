@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdTech Real-Time Analytics - Квантовая аналитика</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff006e;
+            --accent: #8338ec;
+            --success: #06ffa5;
+            --warning: #ffbe0b;
+            --error: #fb5607;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #ffffff;
+            --gray: #666666;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            overflow-y: auto;
+            cursor: auto;
+        }
+
+        .analytics-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 60%, rgba(131, 56, 236, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .analytics-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .analytics-header {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+        }
+
+        .analytics-title {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .analytics-subtitle {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .analytics-dashboard {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 30px;
+            width: 90%;
+            max-width: 1400px;
+            height: 70vh;
+        }
+
+        .analytics-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .analytics-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            animation: scan 3s infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .analytics-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--success);
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(6, 255, 165, 0.5);
+        }
+
+        .card-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .card-progress {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            border-radius: 4px;
+            animation: progressFill 2s ease-in-out;
+        }
+
+        @keyframes progressFill {
+            0% { width: 0%; }
+            100% { width: var(--progress-width, 0%); }
+        }
+
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .quantum-chart {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1), transparent);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .chart-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(0, 212, 255, 0.3) 25%, 
+                rgba(255, 0, 110, 0.3) 50%, 
+                rgba(131, 56, 236, 0.3) 75%, 
+                transparent 100%
+            );
+            animation: chartPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes chartPulse {
+            0%, 100% { opacity: 0.7; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.1); }
+        }
+
+        .quantum-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: particleFloat 6s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .real-time-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--success);
+            border-radius: 20px;
+            padding: 15px 25px;
+            backdrop-filter: blur(20px);
+        }
+
+        .indicator-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .indicator-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: indicatorBlink 1s ease-in-out infinite;
+        }
+
+        @keyframes indicatorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .indicator-text {
+            color: var(--success);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: var(--primary);
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        .analytics-info {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px 40px;
+            border-radius: 25px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        .info-title {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .info-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .quantum-waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to top, rgba(0, 212, 255, 0.1), transparent);
+            overflow: hidden;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 80px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(0, 212, 255, 0.3), 
+                transparent, 
+                rgba(255, 0, 110, 0.3), 
+                transparent
+            );
+            animation: waveMove 6s linear infinite;
+        }
+
+        .wave:nth-child(2) {
+            animation-delay: -2s;
+            opacity: 0.7;
+        }
+
+        .wave:nth-child(3) {
+            animation-delay: -4s;
+            opacity: 0.5;
+        }
+
+        @keyframes waveMove {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
+        }
+
+        @media (max-width: 768px) {
+            .analytics-dashboard {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(6, 1fr);
+                gap: 20px;
+                height: 80vh;
+            }
+            
+            .analytics-title {
+                font-size: 2rem;
+            }
+            
+            .analytics-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="analytics-container">
+        <div class="analytics-grid"></div>
+        <div class="quantum-particles" id="particles"></div>
+        <div class="quantum-waves">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
+
+        <div class="analytics-header">
+            <h1 class="analytics-title">📊 Квантовая аналитика</h1>
+            <p class="analytics-subtitle">АНАЛИЗ В РЕАЛЬНОМ ВРЕМЕНИ</p>
+        </div>
+
+        <button class="back-button" onclick="goBack()">← Назад</button>
+
+        <div class="real-time-indicator">
+            <div class="indicator-content">
+                <div class="indicator-dot"></div>
+                <span class="indicator-text">Данные обновляются в реальном времени</span>
+            </div>
+        </div>
+
+        <div class="analytics-dashboard">
+            <div class="analytics-card">
+                <div class="card-header">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-title">Скорость обучения</div>
+                </div>
+                <div class="card-value" id="learningSpeed">∞</div>
+                <div class="card-label">Слов в секунду</div>
+                <div class="card-progress">
+                    <div class="progress-bar" style="--progress-width: 100%;"></div>
+                </div>
+                <div class="card-stats">
+                    <span>Мин: 0</span>
+                    <span>Макс: ∞</span>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <div class="card-header">
+                    <div class="card-icon">🧠</div>
+                    <div class="card-title">Понимание</div>
+                </div>
+                <div class="card-value" id="understanding">99.9%</div>
+                <div class="card-label">Точность восприятия</div>
+                <div class="card-progress">
+                    <div class="progress-bar" style="--progress-width: 99.9%;"></div>
+                </div>
+                <div class="card-stats">
+                    <span>Мин: 95%</span>
+                    <span>Макс: 100%</span>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <div class="card-header">
+                    <div class="card-icon">⏱️</div>
+                    <div class="card-title">Концентрация</div>
+                </div>
+                <div class="card-value" id="concentration">24/7</div>
+                <div class="card-label">Время фокуса</div>
+                <div class="card-progress">
+                    <div class="progress-bar" style="--progress-width: 100%;"></div>
+                </div>
+                <div class="card-stats">
+                    <span>Мин: 0ч</span>
+                    <span>Макс: ∞</span>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <div class="card-header">
+                    <div class="card-icon">📈</div>
+                    <div class="card-title">Прогресс</div>
+                </div>
+                <div class="card-value" id="progress">∞</div>
+                <div class="card-label">Экспоненциальный рост</div>
+                <div class="card-progress">
+                    <div class="progress-bar" style="--progress-width: 100%;"></div>
+                </div>
+                <div class="card-stats">
+                    <span>Мин: 0%</span>
+                    <span>Макс: ∞</span>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <div class="card-header">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">Цели</div>
+                </div>
+                <div class="card-value" id="goals">100%</div>
+                <div class="card-label">Достигнуто</div>
+                <div class="card-progress">
+                    <div class="progress-bar" style="--progress-width: 100%;"></div>
+                </div>
+                <div class="card-stats">
+                    <span>Мин: 0</span>
+                    <span>Макс: ∞</span>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <div class="card-header">
+                    <div class="card-icon">🌌</div>
+                    <div class="card-title">Квантовый уровень</div>
+                </div>
+                <div class="card-value" id="quantumLevel">99.9%</div>
+                <div class="card-label">Квантовая связь</div>
+                <div class="card-progress">
+                    <div class="progress-bar" style="--progress-width: 99.9%;"></div>
+                </div>
+                <div class="card-stats">
+                    <span>Мин: 0%</span>
+                    <span>Макс: 100%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="analytics-info">
+            <h3 class="info-title">📊 Квантовая аналитика активна</h3>
+            <p class="info-text">Все данные обновляются в реальном времени с квантовой точностью</p>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Update analytics in real-time
+        function updateAnalytics() {
+            const values = {
+                learningSpeed: ['∞', '∞', '∞', '∞', '∞'],
+                understanding: ['99.9%', '99.8%', '99.9%', '100%', '99.9%'],
+                concentration: ['24/7', '24/7', '24/7', '24/7', '24/7'],
+                progress: ['∞', '∞', '∞', '∞', '∞'],
+                goals: ['100%', '100%', '100%', '100%', '100%'],
+                quantumLevel: ['99.9%', '99.8%', '99.9%', '100%', '99.9%']
+            };
+
+            Object.keys(values).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    const randomValue = values[key][Math.floor(Math.random() * values[key].length)];
+                    element.textContent = randomValue;
+                }
+            });
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0, 0, 0, 0.95);
+                color: #00d4ff;
+                padding: 40px;
+                border-radius: 25px;
+                border: 2px solid #00d4ff;
+                font-size: 1.2rem;
+                line-height: 1.8;
+                z-index: 10000;
+                max-width: 600px;
+                text-align: center;
+                backdrop-filter: blur(20px);
+                box-shadow: 0 0 50px rgba(0, 212, 255, 0.5);
+                font-weight: 500;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // Go back function
+        function goBack() {
+            window.location.href = '/';
+        }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                goBack();
+            }
+        });
+
+        // Initialize
+        window.addEventListener('load', () => {
+            createParticles();
+            
+            // Update analytics every 2 seconds
+            setInterval(updateAnalytics, 2000);
+            
+            // Show initial notification
+            setTimeout(() => {
+                showNotification('📊 Квантовая аналитика активирована!\n\n• Данные обновляются в реальном времени\n• Точность: 99.9%\n• Готов к анализу!');
+            }, 1000);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'Escape':
+                    goBack();
+                    break;
+                case 'r':
+                    updateAnalytics();
+                    showNotification('🔄 Аналитика обновлена!\n\n• Новые данные загружены\n• Квантовые расчеты завершены\n• Готов к анализу!');
+                    break;
+            }
+        });
+
+        // Prevent context menu
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

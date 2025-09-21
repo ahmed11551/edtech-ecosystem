@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdTech Metaverse - Виртуальные миры обучения</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff006e;
+            --accent: #8338ec;
+            --success: #06ffa5;
+            --warning: #ffbe0b;
+            --error: #fb5607;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #ffffff;
+            --gray: #666666;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            overflow-y: auto;
+            cursor: auto;
+        }
+
+        .metaverse-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 60%, rgba(131, 56, 236, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .metaverse-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+            background-size: 100px 100px;
+            animation: gridMove 30s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 100px); }
+        }
+
+        .worlds-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 60px;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .world-card {
+            position: relative;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .world-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            animation: scan 3s infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .world-card:hover {
+            transform: translateY(-20px) scale(1.05);
+            border-color: var(--primary);
+            box-shadow: 
+                0 20px 60px rgba(0, 212, 255, 0.3),
+                0 0 100px rgba(0, 212, 255, 0.2);
+        }
+
+        .world-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .world-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .world-description {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .world-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .world-level {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .enter-button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enter-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .enter-button:hover::before {
+            left: 100%;
+        }
+
+        .enter-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .metaverse-header {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+        }
+
+        .metaverse-title {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .metaverse-subtitle {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: particleFloat 8s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .neural-connections {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .connection {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            animation: connectionFlow 4s linear infinite;
+        }
+
+        @keyframes connectionFlow {
+            0% {
+                opacity: 0;
+                transform: scaleX(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scaleX(0);
+            }
+        }
+
+        .world-portal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: portalRotate 20s linear infinite;
+            opacity: 0.2;
+        }
+
+        .world-portal::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            animation: portalRotate 15s linear infinite reverse;
+        }
+
+        .world-portal::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            animation: portalRotate 10s linear infinite;
+        }
+
+        @keyframes portalRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: var(--primary);
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        .world-info {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px 40px;
+            border-radius: 25px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        .world-info h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .world-info p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .worlds-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                width: 95%;
+            }
+            
+            .metaverse-title {
+                font-size: 2rem;
+            }
+            
+            .world-card {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="metaverse-container">
+        <div class="metaverse-grid"></div>
+        <div class="world-portal"></div>
+        
+        <div class="floating-particles" id="particles"></div>
+        <div class="neural-connections" id="connections"></div>
+
+        <div class="metaverse-header">
+            <h1 class="metaverse-title">EdTech Metaverse</h1>
+            <p class="metaverse-subtitle">ВИРТУАЛЬНЫЕ МИРЫ ОБУЧЕНИЯ</p>
+        </div>
+
+        <button class="back-button" onclick="goBack()">← Назад</button>
+
+        <div class="worlds-container">
+            <div class="world-card" onclick="enterWorld('dna-lab')">
+                <div class="world-icon">🧬</div>
+                <h2 class="world-title">Лаборатория ДНК</h2>
+                <div class="world-level">Продвинутый</div>
+                <p class="world-description">
+                    Изучайте генетику в 3D пространстве. Создавайте новые виды, 
+                    экспериментируйте с ДНК и понимайте эволюцию на молекулярном уровне.
+                </p>
+                <div class="world-stats">
+                    <div class="stat">
+                        <div class="stat-number">2.5K</div>
+                        <div class="stat-label">Студентов</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4.9</div>
+                        <div class="stat-label">Рейтинг</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">120ч</div>
+                        <div class="stat-label">Длительность</div>
+                    </div>
+                </div>
+                <button class="enter-button">Войти в мир</button>
+            </div>
+
+            <div class="world-card" onclick="enterWorld('space-station')">
+                <div class="world-icon">🌌</div>
+                <h2 class="world-title">Космическая станция</h2>
+                <div class="world-level">Средний</div>
+                <p class="world-description">
+                    Физика и астрономия в невесомости. Изучайте законы Вселенной, 
+                    путешествуйте между галактиками и исследуйте черные дыры.
+                </p>
+                <div class="world-stats">
+                    <div class="stat">
+                        <div class="stat-number">3.2K</div>
+                        <div class="stat-label">Студентов</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4.8</div>
+                        <div class="stat-label">Рейтинг</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">90ч</div>
+                        <div class="stat-label">Длительность</div>
+                    </div>
+                </div>
+                <button class="enter-button">Войти в мир</button>
+            </div>
+
+            <div class="world-card" onclick="enterWorld('ancient-rome')">
+                <div class="world-icon">🏛️</div>
+                <h2 class="world-title">Древний Рим</h2>
+                <div class="world-level">Начинающий</div>
+                <p class="world-description">
+                    История в виртуальной реальности. Прогуляйтесь по форуму, 
+                    посетите Колизей и станьте свидетелем исторических событий.
+                </p>
+                <div class="world-stats">
+                    <div class="stat">
+                        <div class="stat-number">5.1K</div>
+                        <div class="stat-label">Студентов</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4.7</div>
+                        <div class="stat-label">Рейтинг</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">60ч</div>
+                        <div class="stat-label">Длительность</div>
+                    </div>
+                </div>
+                <button class="enter-button">Войти в мир</button>
+            </div>
+
+            <div class="world-card" onclick="enterWorld('code-matrix')">
+                <div class="world-icon">💻</div>
+                <h2 class="world-title">Матрица кода</h2>
+                <div class="world-level">Средний</div>
+                <p class="world-description">
+                    Программирование в киберпространстве. Видите код как архитектуру, 
+                    отлаживайте программы в 3D и создавайте виртуальные приложения.
+                </p>
+                <div class="world-stats">
+                    <div class="stat">
+                        <div class="stat-number">4.3K</div>
+                        <div class="stat-label">Студентов</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4.9</div>
+                        <div class="stat-label">Рейтинг</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">150ч</div>
+                        <div class="stat-label">Длительность</div>
+                    </div>
+                </div>
+                <button class="enter-button">Войти в мир</button>
+            </div>
+
+            <div class="world-card" onclick="enterWorld('quantum-realm')">
+                <div class="world-icon">⚛️</div>
+                <h2 class="world-title">Квантовое царство</h2>
+                <div class="world-level">Эксперт</div>
+                <p class="world-description">
+                    Квантовая физика в суперпозиции. Наблюдайте квантовые эффекты, 
+                    экспериментируйте с запутанностью и программируйте квантовые компьютеры.
+                </p>
+                <div class="world-stats">
+                    <div class="stat">
+                        <div class="stat-number">1.8K</div>
+                        <div class="stat-label">Студентов</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4.9</div>
+                        <div class="stat-label">Рейтинг</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">200ч</div>
+                        <div class="stat-label">Длительность</div>
+                    </div>
+                </div>
+                <button class="enter-button">Войти в мир</button>
+            </div>
+
+            <div class="world-card" onclick="enterWorld('art-gallery')">
+                <div class="world-icon">🎨</div>
+                <h2 class="world-title">Галерея искусств</h2>
+                <div class="world-level">Начинающий</div>
+                <p class="world-description">
+                    Творчество в виртуальной реальности. Создавайте шедевры в 3D, 
+                    изучайте историю искусства и взаимодействуйте с великими мастерами.
+                </p>
+                <div class="world-stats">
+                    <div class="stat">
+                        <div class="stat-number">2.7K</div>
+                        <div class="stat-label">Студентов</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4.6</div>
+                        <div class="stat-label">Рейтинг</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">75ч</div>
+                        <div class="stat-label">Длительность</div>
+                    </div>
+                </div>
+                <button class="enter-button">Войти в мир</button>
+            </div>
+        </div>
+
+        <div class="world-info">
+            <h3>🌌 Добро пожаловать в метавселенную!</h3>
+            <p>Выберите мир для погружения в обучение. Каждый мир - это уникальная вселенная знаний!</p>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Create neural connections
+        function createConnections() {
+            const container = document.getElementById('connections');
+            const connectionCount = 15;
+
+            for (let i = 0; i < connectionCount; i++) {
+                const connection = document.createElement('div');
+                connection.className = 'connection';
+                connection.style.top = Math.random() * 100 + '%';
+                connection.style.left = Math.random() * 100 + '%';
+                connection.style.width = Math.random() * 300 + 100 + 'px';
+                connection.style.animationDelay = Math.random() * 4 + 's';
+                container.appendChild(connection);
+            }
+        }
+
+        // Enter world function
+        function enterWorld(worldId) {
+            const worldNames = {
+                'dna-lab': 'Лаборатория ДНК',
+                'space-station': 'Космическая станция',
+                'ancient-rome': 'Древний Рим',
+                'code-matrix': 'Матрица кода',
+                'quantum-realm': 'Квантовое царство',
+                'art-gallery': 'Галерея искусств'
+            };
+
+            const worldName = worldNames[worldId];
+            
+            showNotification(`🌌 Загрузка мира "${worldName}"...\n\n• Инициализация виртуальной реальности\n• Подключение к квантовой сети\n• Синхронизация нейронных интерфейсов\n• Готово! Добро пожаловать в ${worldName}!`);
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0, 0, 0, 0.95);
+                color: #00d4ff;
+                padding: 40px;
+                border-radius: 25px;
+                border: 2px solid #00d4ff;
+                font-size: 1.2rem;
+                line-height: 1.8;
+                z-index: 10000;
+                max-width: 600px;
+                text-align: center;
+                backdrop-filter: blur(20px);
+                box-shadow: 0 0 50px rgba(0, 212, 255, 0.5);
+                font-weight: 500;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500);
+            }, 4000);
+        }
+
+        // Go back function
+        function goBack() {
+            window.location.href = '/';
+        }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                goBack();
+            }
+        });
+
+        // Initialize
+        window.addEventListener('load', () => {
+            createParticles();
+            createConnections();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'Escape':
+                    goBack();
+                    break;
+                case '1':
+                    enterWorld('dna-lab');
+                    break;
+                case '2':
+                    enterWorld('space-station');
+                    break;
+                case '3':
+                    enterWorld('ancient-rome');
+                    break;
+                case '4':
+                    enterWorld('code-matrix');
+                    break;
+                case '5':
+                    enterWorld('quantum-realm');
+                    break;
+                case '6':
+                    enterWorld('art-gallery');
+                    break;
+            }
+        });
+
+        // Prevent context menu
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

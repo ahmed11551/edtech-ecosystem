@@ -1,0 +1,56 @@
+{
+  "version": 2,
+  "name": "edtech-frontend",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "https://edtech-backend.railway.app/api/$1"
+    },
+    {
+      "src": "/3d",
+      "dest": "/3d-demo/index.html"
+    },
+    {
+      "src": "/metaverse",
+      "dest": "/metaverse-worlds/index.html"
+    },
+    {
+      "src": "/neural",
+      "dest": "/neural-interface/index.html"
+    },
+    {
+      "src": "/hologram",
+      "dest": "/holographic-projections/index.html"
+    },
+    {
+      "src": "/mentors",
+      "dest": "/quantum-mentors/index.html"
+    },
+    {
+      "src": "/analytics",
+      "dest": "/real-time-analytics/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "env": {
+    "REACT_APP_API_URL": "https://edtech-backend.railway.app/api",
+    "REACT_APP_QUANTUM_AI_URL": "https://edtech-backend.railway.app/api/quantum-ai",
+    "REACT_APP_METAVERSE_URL": "https://edtech-frontend.vercel.app/metaverse",
+    "REACT_APP_NEURAL_URL": "https://edtech-frontend.vercel.app/neural",
+    "REACT_APP_HOLOGRAM_URL": "https://edtech-frontend.vercel.app/hologram",
+    "REACT_APP_MENTORS_URL": "https://edtech-frontend.vercel.app/mentors",
+    "REACT_APP_ANALYTICS_URL": "https://edtech-frontend.vercel.app/analytics"
+  }
+}

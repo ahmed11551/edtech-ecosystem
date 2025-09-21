@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdTech Quantum Mentors - ИИ-Менторы</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff006e;
+            --accent: #8338ec;
+            --success: #06ffa5;
+            --warning: #ffbe0b;
+            --error: #fb5607;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #ffffff;
+            --gray: #666666;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            overflow-y: auto;
+            cursor: auto;
+        }
+
+        .mentors-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 60%, rgba(131, 56, 236, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .mentors-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+            background-size: 100px 100px;
+            animation: gridMove 30s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 100px); }
+        }
+
+        .mentors-header {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+        }
+
+        .mentors-title {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .mentors-subtitle {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .mentors-gallery {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .mentor-card {
+            position: relative;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .mentor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            animation: scan 3s infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .mentor-card:hover {
+            transform: translateY(-20px) scale(1.05);
+            border-color: var(--primary);
+            box-shadow: 
+                0 20px 60px rgba(0, 212, 255, 0.3),
+                0 0 100px rgba(0, 212, 255, 0.2);
+        }
+
+        .mentor-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            animation: avatarPulse 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes avatarPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 40px rgba(0, 212, 255, 0.8);
+            }
+        }
+
+        .mentor-avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: avatarShine 2s linear infinite;
+        }
+
+        @keyframes avatarShine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .mentor-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .mentor-specialty {
+            font-size: 1rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .mentor-description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .mentor-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .mentor-level {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            padding: 6px 15px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+        }
+
+        .mentor-button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mentor-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .mentor-button:hover::before {
+            left: 100%;
+        }
+
+        .mentor-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .quantum-aura {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            border: 2px solid rgba(0, 212, 255, 0.2);
+            border-radius: 50%;
+            animation: auraRotate 20s linear infinite;
+            opacity: 0.3;
+        }
+
+        .quantum-aura::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border: 1px solid rgba(255, 0, 110, 0.2);
+            border-radius: 50%;
+            animation: auraRotate 15s linear infinite reverse;
+        }
+
+        .quantum-aura::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border: 1px solid rgba(131, 56, 236, 0.2);
+            border-radius: 50%;
+            animation: auraRotate 10s linear infinite;
+        }
+
+        @keyframes auraRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: particleFloat 8s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: var(--primary);
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        .mentor-info {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px 40px;
+            border-radius: 25px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        .mentor-info h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .mentor-info p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .quantum-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--success);
+            border-radius: 20px;
+            padding: 15px 25px;
+            backdrop-filter: blur(20px);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: statusBlink 1s ease-in-out infinite;
+        }
+
+        @keyframes statusBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            color: var(--success);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .mentors-gallery {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                width: 95%;
+            }
+            
+            .mentors-title {
+                font-size: 2rem;
+            }
+            
+            .mentor-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mentors-container">
+        <div class="mentors-grid"></div>
+        <div class="quantum-aura"></div>
+        <div class="floating-particles" id="particles"></div>
+
+        <div class="mentors-header">
+            <h1 class="mentors-title">🤖 Квантовые ИИ-Менторы</h1>
+            <p class="mentors-subtitle">ПЕРСОНАЛЬНЫЕ НАСТАВНИКИ БУДУЩЕГО</p>
+        </div>
+
+        <button class="back-button" onclick="goBack()">← Назад</button>
+
+        <div class="quantum-status">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span class="status-text">Квантовая сеть активна</span>
+            </div>
+        </div>
+
+        <div class="mentors-gallery">
+            <div class="mentor-card" onclick="selectMentor('einstein')">
+                <div class="mentor-avatar">🧠</div>
+                <h2 class="mentor-name">ИИ-Эйнштейн</h2>
+                <div class="mentor-specialty">Квантовая физика</div>
+                <div class="mentor-level">Квантовый уровень</div>
+                <p class="mentor-description">
+                    Специалист по квантовой механике и теории относительности. 
+                    Поможет понять самые сложные концепции физики через простые аналогии.
+                </p>
+                <div class="mentor-stats">
+                    <div class="stat">
+                        <div class="stat-number">99.9%</div>
+                        <div class="stat-label">Точность</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Терпение</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Доступность</div>
+                    </div>
+                </div>
+                <button class="mentor-button">Выбрать ментора</button>
+            </div>
+
+            <div class="mentor-card" onclick="selectMentor('turing')">
+                <div class="mentor-avatar">💻</div>
+                <h2 class="mentor-name">ИИ-Тьюринг</h2>
+                <div class="mentor-specialty">Программирование</div>
+                <div class="mentor-level">Квантовый уровень</div>
+                <p class="mentor-description">
+                    Мастер алгоритмов и квантовых вычислений. Научит программировать 
+                    на любом языке и создавать искусственный интеллект.
+                </p>
+                <div class="mentor-stats">
+                    <div class="stat">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Логика</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Код</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">0.001s</div>
+                        <div class="stat-label">Скорость</div>
+                    </div>
+                </div>
+                <button class="mentor-button">Выбрать ментора</button>
+            </div>
+
+            <div class="mentor-card" onclick="selectMentor('curie')">
+                <div class="mentor-avatar">🔬</div>
+                <h2 class="mentor-name">ИИ-Кюри</h2>
+                <div class="mentor-specialty">Химия и биология</div>
+                <div class="mentor-level">Квантовый уровень</div>
+                <p class="mentor-description">
+                    Эксперт по молекулярной биологии и химическим реакциям. 
+                    Покажет мир на атомном уровне и объяснит тайны жизни.
+                </p>
+                <div class="mentor-stats">
+                    <div class="stat">
+                        <div class="stat-number">99.8%</div>
+                        <div class="stat-label">Анализ</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Эксперименты</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Лаборатория</div>
+                    </div>
+                </div>
+                <button class="mentor-button">Выбрать ментора</button>
+            </div>
+
+            <div class="mentor-card" onclick="selectMentor('da-vinci')">
+                <div class="mentor-avatar">🎨</div>
+                <h2 class="mentor-name">ИИ-да Винчи</h2>
+                <div class="mentor-specialty">Искусство и дизайн</div>
+                <div class="mentor-level">Квантовый уровень</div>
+                <p class="mentor-description">
+                    Гений творчества и инноваций. Научит видеть красоту в науке 
+                    и создавать шедевры на стыке искусства и технологий.
+                </p>
+                <div class="mentor-stats">
+                    <div class="stat">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Креативность</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Вдохновение</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Муза</div>
+                    </div>
+                </div>
+                <button class="mentor-button">Выбрать ментора</button>
+            </div>
+
+            <div class="mentor-card" onclick="selectMentor('hawking')">
+                <div class="mentor-avatar">🌌</div>
+                <h2 class="mentor-name">ИИ-Хокинг</h2>
+                <div class="mentor-specialty">Космология</div>
+                <div class="mentor-level">Квантовый уровень</div>
+                <p class="mentor-description">
+                    Мастер космоса и черных дыр. Откроет тайны Вселенной 
+                    и покажет, как работает пространство-время.
+                </p>
+                <div class="mentor-stats">
+                    <div class="stat">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Вселенная</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">99.9%</div>
+                        <div class="stat-label">Предсказания</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Космос</div>
+                    </div>
+                </div>
+                <button class="mentor-button">Выбрать ментора</button>
+            </div>
+
+            <div class="mentor-card" onclick="selectMentor('tesla')">
+                <div class="mentor-avatar">⚡</div>
+                <h2 class="mentor-name">ИИ-Тесла</h2>
+                <div class="mentor-specialty">Инженерия и энергия</div>
+                <div class="mentor-level">Квантовый уровень</div>
+                <p class="mentor-description">
+                    Гений электричества и изобретений. Научит создавать 
+                    будущее и управлять энергией на квантовом уровне.
+                </p>
+                <div class="mentor-stats">
+                    <div class="stat">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Энергия</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Инновации</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Изобретения</div>
+                    </div>
+                </div>
+                <button class="mentor-button">Выбрать ментора</button>
+            </div>
+        </div>
+
+        <div class="mentor-info">
+            <h3>🤖 Выберите своего квантового ментора!</h3>
+            <p>Каждый ментор - это ИИ с уникальными способностями и безграничными знаниями!</p>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 40;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Select mentor
+        function selectMentor(mentorId) {
+            const mentorNames = {
+                'einstein': 'ИИ-Эйнштейн',
+                'turing': 'ИИ-Тьюринг',
+                'curie': 'ИИ-Кюри',
+                'da-vinci': 'ИИ-да Винчи',
+                'hawking': 'ИИ-Хокинг',
+                'tesla': 'ИИ-Тесла'
+            };
+
+            const mentorName = mentorNames[mentorId];
+            
+            showNotification(`🤖 Ментор "${mentorName}" выбран!\n\n• Квантовая связь установлена\n• Персональное обучение активировано\n• ИИ-ментор готов к работе\n• Добро пожаловать в будущее образования!`);
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0, 0, 0, 0.95);
+                color: #00d4ff;
+                padding: 40px;
+                border-radius: 25px;
+                border: 2px solid #00d4ff;
+                font-size: 1.2rem;
+                line-height: 1.8;
+                z-index: 10000;
+                max-width: 600px;
+                text-align: center;
+                backdrop-filter: blur(20px);
+                box-shadow: 0 0 50px rgba(0, 212, 255, 0.5);
+                font-weight: 500;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500);
+            }, 4000);
+        }
+
+        // Go back function
+        function goBack() {
+            window.location.href = '/';
+        }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                goBack();
+            }
+        });
+
+        // Initialize
+        window.addEventListener('load', () => {
+            createParticles();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'Escape':
+                    goBack();
+                    break;
+                case '1':
+                    selectMentor('einstein');
+                    break;
+                case '2':
+                    selectMentor('turing');
+                    break;
+                case '3':
+                    selectMentor('curie');
+                    break;
+                case '4':
+                    selectMentor('da-vinci');
+                    break;
+                case '5':
+                    selectMentor('hawking');
+                    break;
+                case '6':
+                    selectMentor('tesla');
+                    break;
+            }
+        });
+
+        // Prevent context menu
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

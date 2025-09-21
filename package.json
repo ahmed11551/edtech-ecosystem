@@ -1,0 +1,29 @@
+{
+  "name": "edtech-ecosystem-mvp",
+  "version": "1.0.0",
+  "description": "EdTech Ecosystem Platform MVP",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install"
+  },
+  "keywords": [
+    "edtech",
+    "education",
+    "platform",
+    "mvp"
+  ],
+  "author": "EdTech Ecosystem Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}

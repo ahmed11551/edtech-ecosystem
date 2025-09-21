@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdTech Holographic Projections - 3D Обучение</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff006e;
+            --accent: #8338ec;
+            --success: #06ffa5;
+            --warning: #ffbe0b;
+            --error: #fb5607;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #ffffff;
+            --gray: #666666;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            overflow-y: auto;
+            cursor: auto;
+        }
+
+        .hologram-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 60%, rgba(131, 56, 236, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+        }
+
+        .hologram-stage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.05), transparent);
+            animation: stageGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes stageGlow {
+            0%, 100% {
+                box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 100px rgba(0, 212, 255, 0.6);
+            }
+        }
+
+        .hologram-object {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, 
+                rgba(0, 212, 255, 0.8), 
+                rgba(255, 0, 110, 0.8), 
+                rgba(131, 56, 236, 0.8)
+            );
+            border-radius: 20px;
+            animation: hologramFloat 4s ease-in-out infinite;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes hologramFloat {
+            0%, 100% {
+                transform: translate(-50%, -50%) rotateY(0deg) rotateX(0deg);
+            }
+            25% {
+                transform: translate(-50%, -50%) rotateY(90deg) rotateX(10deg);
+            }
+            50% {
+                transform: translate(-50%, -50%) rotateY(180deg) rotateX(0deg);
+            }
+            75% {
+                transform: translate(-50%, -50%) rotateY(270deg) rotateX(-10deg);
+            }
+        }
+
+        .hologram-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--light);
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        .hologram-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: particleFloat 6s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .hologram-controls {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            max-width: 400px;
+        }
+
+        .control-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .control-subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .hologram-types {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .type-button {
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            color: var(--primary);
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .type-button:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .type-button.active {
+            background: var(--primary);
+            color: var(--dark);
+            border-color: var(--primary);
+        }
+
+        .hologram-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .action-button {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .action-button:hover::before {
+            left: 100%;
+        }
+
+        .action-button:hover {
+            background: var(--primary);
+            color: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .hologram-info {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            max-width: 400px;
+        }
+
+        .info-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .info-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .hologram-status {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 25px;
+            padding: 20px 40px;
+            backdrop-filter: blur(20px);
+            text-align: center;
+        }
+
+        .status-title {
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .status-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: var(--primary);
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        .hologram-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .hologram-beams {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .beam {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+            animation: beamScan 3s linear infinite;
+        }
+
+        @keyframes beamScan {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hologram-controls {
+                top: 20px;
+                left: 20px;
+                right: 20px;
+                max-width: none;
+            }
+            
+            .hologram-info {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                max-width: none;
+            }
+            
+            .hologram-stage {
+                width: 400px;
+                height: 400px;
+            }
+            
+            .hologram-object {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hologram-container">
+        <div class="hologram-grid"></div>
+        <div class="hologram-beams" id="beams"></div>
+        <div class="hologram-particles" id="particles"></div>
+
+        <div class="hologram-stage">
+            <div class="hologram-object" id="hologramObject">
+                <div class="hologram-content" id="hologramContent">
+                    🧬 ДНК<br>
+                    Структура
+                </div>
+            </div>
+        </div>
+
+        <button class="back-button" onclick="goBack()">← Назад</button>
+
+        <div class="hologram-controls">
+            <h1 class="control-title">🎭 Голографические проекции</h1>
+            <p class="control-subtitle">
+                Создавайте 3D объекты в воздухе! Изучайте анатомию, физику, 
+                химию и математику в голографическом пространстве.
+            </p>
+
+            <div class="hologram-types">
+                <button class="type-button active" onclick="changeType('dna')">🧬 ДНК</button>
+                <button class="type-button" onclick="changeType('atom')">⚛️ Атом</button>
+                <button class="type-button" onclick="changeType('heart')">❤️ Сердце</button>
+                <button class="type-button" onclick="changeType('brain')">🧠 Мозг</button>
+                <button class="type-button" onclick="changeType('solar')">🌞 Солнечная система</button>
+                <button class="type-button" onclick="changeType('molecule')">🔬 Молекула</button>
+            </div>
+
+            <div class="hologram-actions">
+                <button class="action-button" onclick="rotateObject()">🔄 Вращать</button>
+                <button class="action-button" onclick="scaleObject()">📏 Масштабировать</button>
+                <button class="action-button" onclick="explodeObject()">💥 Разобрать</button>
+                <button class="action-button" onclick="animateObject()">⚡ Анимировать</button>
+                <button class="action-button" onclick="saveHologram()">💾 Сохранить</button>
+            </div>
+        </div>
+
+        <div class="hologram-info">
+            <h3 class="info-title">📊 Статистика проекции</h3>
+            <div class="info-item">
+                <span class="info-label">Тип объекта:</span>
+                <span class="info-value" id="objectType">ДНК</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Размер:</span>
+                <span class="info-value" id="objectSize">200x200px</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Прозрачность:</span>
+                <span class="info-value" id="objectOpacity">80%</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Вращение:</span>
+                <span class="info-value" id="objectRotation">0°</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Статус:</span>
+                <span class="info-value" id="objectStatus">Активна</span>
+            </div>
+        </div>
+
+        <div class="hologram-status">
+            <h3 class="status-title">🎭 Голографическая проекция активна</h3>
+            <p class="status-text">Объект отображается в 3D пространстве с квантовой точностью</p>
+        </div>
+    </div>
+
+    <script>
+        let currentType = 'dna';
+        let isRotating = false;
+        let isScaling = false;
+        let isAnimating = false;
+        let rotationAngle = 0;
+        let scale = 1;
+
+        // Create hologram beams
+        function createBeams() {
+            const container = document.getElementById('beams');
+            const beamCount = 8;
+
+            for (let i = 0; i < beamCount; i++) {
+                const beam = document.createElement('div');
+                beam.className = 'beam';
+                beam.style.left = Math.random() * 100 + '%';
+                beam.style.animationDelay = Math.random() * 3 + 's';
+                beam.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                container.appendChild(beam);
+            }
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Change hologram type
+        function changeType(type) {
+            currentType = type;
+            
+            // Update active button
+            document.querySelectorAll('.type-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update hologram content
+            const content = document.getElementById('hologramContent');
+            const typeData = {
+                'dna': { icon: '🧬', name: 'ДНК', desc: 'Структура' },
+                'atom': { icon: '⚛️', name: 'Атом', desc: 'Водорода' },
+                'heart': { icon: '❤️', name: 'Сердце', desc: 'Человека' },
+                'brain': { icon: '🧠', name: 'Мозг', desc: 'Нейроны' },
+                'solar': { icon: '🌞', name: 'Солнечная', desc: 'Система' },
+                'molecule': { icon: '🔬', name: 'Молекула', desc: 'H2O' }
+            };
+            
+            const data = typeData[type];
+            content.innerHTML = `${data.icon} ${data.name}<br>${data.desc}`;
+            
+            // Update info
+            document.getElementById('objectType').textContent = data.name;
+            
+            showNotification(`🎭 Голограмма изменена на "${data.name}"!\n\n• 3D объект обновлен\n• Структура загружена\n• Готов к изучению!`);
+        }
+
+        // Rotate object
+        function rotateObject() {
+            isRotating = !isRotating;
+            const object = document.getElementById('hologramObject');
+            
+            if (isRotating) {
+                object.style.animation = 'hologramFloat 2s ease-in-out infinite';
+                showNotification(`🔄 Вращение активировано!\n\n• Объект вращается в 3D\n• Изучайте со всех сторон\n• Нажмите еще раз для остановки`);
+            } else {
+                object.style.animation = 'hologramFloat 4s ease-in-out infinite';
+                showNotification(`⏹️ Вращение остановлено!\n\n• Объект зафиксирован\n• Готов к детальному изучению`);
+            }
+        }
+
+        // Scale object
+        function scaleObject() {
+            isScaling = !isScaling;
+            const object = document.getElementById('hologramObject');
+            
+            if (isScaling) {
+                scale = scale === 1 ? 1.5 : 1;
+                object.style.transform = `translate(-50%, -50%) scale(${scale})`;
+                showNotification(`📏 Масштаб изменен!\n\n• Размер: ${scale * 100}%\n• Детализация увеличена\n• Изучайте микроструктуру`);
+            } else {
+                showNotification(`📏 Масштабирование остановлено!\n\n• Объект в нормальном размере\n• Оптимальный обзор`);
+            }
+        }
+
+        // Explode object
+        function explodeObject() {
+            const object = document.getElementById('hologramObject');
+            object.style.animation = 'none';
+            object.style.transform = 'translate(-50%, -50%) scale(1.2)';
+            object.style.filter = 'hue-rotate(180deg)';
+            
+            showNotification(`💥 Объект разобран!\n\n• Компоненты разделены\n• Структура видна\n• Изучайте детали`);
+            
+            setTimeout(() => {
+                object.style.animation = 'hologramFloat 4s ease-in-out infinite';
+                object.style.transform = 'translate(-50%, -50%) scale(1)';
+                object.style.filter = 'none';
+            }, 3000);
+        }
+
+        // Animate object
+        function animateObject() {
+            isAnimating = !isAnimating;
+            const object = document.getElementById('hologramObject');
+            
+            if (isAnimating) {
+                object.style.animation = 'hologramFloat 1s ease-in-out infinite';
+                showNotification(`⚡ Анимация запущена!\n\n• Объект в движении\n• Процессы видны\n• Изучайте динамику`);
+            } else {
+                object.style.animation = 'hologramFloat 4s ease-in-out infinite';
+                showNotification(`⏹️ Анимация остановлена!\n\n• Объект статичен\n• Готов к изучению`);
+            }
+        }
+
+        // Save hologram
+        function saveHologram() {
+            showNotification(`💾 Голограмма сохранена!\n\n• 3D модель записана\n• Доступна для повторного просмотра\n• Синхронизирована с облаком`);
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0, 0, 0, 0.95);
+                color: #00d4ff;
+                padding: 40px;
+                border-radius: 25px;
+                border: 2px solid #00d4ff;
+                font-size: 1.2rem;
+                line-height: 1.8;
+                z-index: 10000;
+                max-width: 600px;
+                text-align: center;
+                backdrop-filter: blur(20px);
+                box-shadow: 0 0 50px rgba(0, 212, 255, 0.5);
+                font-weight: 500;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // Go back function
+        function goBack() {
+            window.location.href = '/';
+        }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                goBack();
+            }
+        });
+
+        // Initialize
+        window.addEventListener('load', () => {
+            createBeams();
+            createParticles();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'Escape':
+                    goBack();
+                    break;
+                case '1':
+                    changeType('dna');
+                    break;
+                case '2':
+                    changeType('atom');
+                    break;
+                case '3':
+                    changeType('heart');
+                    break;
+                case '4':
+                    changeType('brain');
+                    break;
+                case '5':
+                    changeType('solar');
+                    break;
+                case '6':
+                    changeType('molecule');
+                    break;
+                case 'r':
+                    rotateObject();
+                    break;
+                case 's':
+                    scaleObject();
+                    break;
+                case 'e':
+                    explodeObject();
+                    break;
+                case 'a':
+                    animateObject();
+                    break;
+            }
+        });
+
+        // Prevent context menu
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

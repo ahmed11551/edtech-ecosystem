@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdTech Ecosystem Platform - MVP Demo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .feature-description {
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        .demo-interface {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .course-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .course-info h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .course-info p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .ai-recommendation {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .ai-recommendation h4 {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .recommendation-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .recommendation-score {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+
+        .analytics-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .analytics-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .analytics-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .analytics-label {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin-top: 40px;
+        }
+
+        .cta-button {
+            background: white;
+            color: #667eea;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin: 20px 10px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .demo-video {
+            background: #000;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            margin: 20px 0;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #333, #555);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-graduation-cap"></i> EdTech Ecosystem Platform</h1>
+            <p>Революционная образовательная платформа с ИИ-персонализацией</p>
+        </div>
+
+        <div class="demo-section">
+            <h2 class="section-title">
+                <i class="fas fa-rocket"></i>
+                Ключевые возможности платформы
+            </h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="feature-title">ИИ-персонализация</h3>
+                    <p class="feature-description">
+                        Умные алгоритмы адаптируют контент под каждого пользователя, 
+                        создавая индивидуальные образовательные траектории.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Аналитика прогресса</h3>
+                    <p class="feature-description">
+                        Детальная аналитика обучения в реальном времени с 
+                        рекомендациями по улучшению результатов.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">Социальное обучение</h3>
+                    <p class="feature-description">
+                        Интерактивные форумы, групповые проекты и 
+                        система наставничества для эффективного обучения.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Мультиплатформенность</h3>
+                    <p class="feature-description">
+                        Доступ с любых устройств: веб, мобильные приложения 
+                        с синхронизацией прогресса.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h3 class="feature-title">Маркетплейс контента</h3>
+                    <p class="feature-description">
+                        Платформа для создания и продажи образовательного 
+                        контента с системой монетизации.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3 class="feature-title">Корпоративные решения</h3>
+                    <p class="feature-description">
+                        Комплексные решения для корпоративного обучения 
+                        с интеграцией в HR-процессы.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2 class="section-title">
+                <i class="fas fa-play-circle"></i>
+                Интерактивная демонстрация
+            </h2>
+
+            <div class="demo-interface">
+                <div class="tabs">
+                    <div class="tab active" onclick="showTab('learning')">
+                        <i class="fas fa-book"></i> Обучение
+                    </div>
+                    <div class="tab" onclick="showTab('recommendations')">
+                        <i class="fas fa-magic"></i> Рекомендации ИИ
+                    </div>
+                    <div class="tab" onclick="showTab('analytics')">
+                        <i class="fas fa-chart-bar"></i> Аналитика
+                    </div>
+                    <div class="tab" onclick="showTab('marketplace')">
+                        <i class="fas fa-shopping-cart"></i> Маркетплейс
+                    </div>
+                </div>
+
+                <div id="learning" class="tab-content active">
+                    <h3>Мои курсы</h3>
+                    
+                    <div class="course-card">
+                        <div class="course-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="course-info">
+                            <h4>Python для начинающих</h4>
+                            <p>Изучите основы программирования на Python</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                            <small>75% завершено</small>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div class="course-info">
+                            <h4>UI/UX Дизайн</h4>
+                            <p>Создание пользовательских интерфейсов</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 30%"></div>
+                            </div>
+                            <small>30% завершено</small>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="course-info">
+                            <h4>Анализ данных</h4>
+                            <p>Data Science и машинное обучение</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 90%"></div>
+                            </div>
+                            <small>90% завершено</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="recommendations" class="tab-content">
+                    <div class="ai-recommendation">
+                        <h4><i class="fas fa-robot"></i> Персональные рекомендации ИИ</h4>
+                        <p>На основе вашего прогресса и интересов</p>
+                        
+                        <div class="recommendation-item">
+                            <div>
+                                <strong>Машинное обучение с TensorFlow</strong>
+                                <br>
+                                <small>Продолжение курса "Анализ данных"</small>
+                            </div>
+                            <div class="recommendation-score">95%</div>
+                        </div>
+
+                        <div class="recommendation-item">
+                            <div>
+                                <strong>Веб-разработка на React</strong>
+                                <br>
+                                <small>Дополнение к навыкам UI/UX</small>
+                            </div>
+                            <div class="recommendation-score">87%</div>
+                        </div>
+
+                        <div class="recommendation-item">
+                            <div>
+                                <strong>DevOps и Docker</strong>
+                                <br>
+                                <small>Расширение технических навыков</small>
+                            </div>
+                            <div class="recommendation-score">82%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="analytics" class="tab-content">
+                    <h3>Аналитика обучения</h3>
+                    
+                    <div class="analytics-dashboard">
+                        <div class="analytics-card">
+                            <div class="analytics-number">47</div>
+                            <div class="analytics-label">Часов изучено</div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-number">12</div>
+                            <div class="analytics-label">Курсов завершено</div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-number">8.7</div>
+                            <div class="analytics-label">Средняя оценка</div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-number">15</div>
+                            <div class="analytics-label">Дней подряд</div>
+                        </div>
+                    </div>
+
+                    <div class="demo-video">
+                        <h4>График прогресса обучения</h4>
+                        <div class="video-placeholder">
+                            <i class="fas fa-chart-area" style="font-size: 3rem; opacity: 0.5;"></i>
+                            <div style="margin-left: 20px;">
+                                <div>Интерактивный график</div>
+                                <div style="font-size: 0.9rem; opacity: 0.7;">показывающий прогресс по времени</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="marketplace" class="tab-content">
+                    <h3>Маркетплейс образовательного контента</h3>
+                    
+                    <div class="course-card">
+                        <div class="course-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="course-info">
+                            <h4>Создание мобильных приложений</h4>
+                            <p>Полный курс по React Native</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <span style="color: #667eea; font-weight: 600;">4.9 ⭐ (1,234 отзыва)</span>
+                                <span style="font-size: 1.2rem; font-weight: 700; color: #2d3748;">₽2,990</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="course-info">
+                            <h4>Продвинутый Python</h4>
+                            <p>Асинхронное программирование и оптимизация</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <span style="color: #667eea; font-weight: 600;">4.8 ⭐ (856 отзывов)</span>
+                                <span style="font-size: 1.2rem; font-weight: 700; color: #2d3748;">₽1,990</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="course-info">
+                            <h4>Системное администрирование</h4>
+                            <p>Linux, Docker, Kubernetes</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <span style="color: #667eea; font-weight: 600;">4.9 ⭐ (2,156 отзывов)</span>
+                                <span style="font-size: 1.2rem; font-weight: 700; color: #2d3748;">₽3,490</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2 class="section-title">
+                <i class="fas fa-video"></i>
+                Демонстрационное видео
+            </h2>
+            
+            <div class="demo-video">
+                <div class="video-placeholder">
+                    <i class="fas fa-play-circle" style="font-size: 4rem; opacity: 0.7;"></i>
+                    <div style="margin-left: 20px;">
+                        <div style="font-size: 1.5rem; margin-bottom: 10px;">Демо-видео платформы</div>
+                        <div style="opacity: 0.8;">Показ ключевых функций и пользовательского интерфейса</div>
+                        <div style="opacity: 0.6; font-size: 0.9rem; margin-top: 10px;">Длительность: 3-5 минут</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">
+                Готовы к революции в образовании?
+            </h2>
+            <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9;">
+                Присоединяйтесь к нам и станьте частью будущего обучения
+            </p>
+            <button class="cta-button" onclick="showInvestmentInfo()">
+                <i class="fas fa-chart-line"></i> Инвестиционные возможности
+            </button>
+            <button class="cta-button" onclick="showPartnership()">
+                <i class="fas fa-handshake"></i> Партнерство
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Скрыть все вкладки
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Убрать активный класс с всех табов
+            const tabButtons = document.querySelectorAll('.tab');
+            tabButtons.forEach(tab => tab.classList.remove('active'));
+            
+            // Показать выбранную вкладку
+            document.getElementById(tabName).classList.add('active');
+            
+            // Добавить активный класс к кнопке
+            event.target.classList.add('active');
+        }
+
+        function showInvestmentInfo() {
+            alert('Инвестиционные возможности:\n\n• Раунд A: 500 млн рублей\n• Доля: 20-25%\n• Оценка: 2-2.5 млрд рублей\n\nКонтакт: invest@edtech-ecosystem.ru');
+        }
+
+        function showPartnership() {
+            alert('Партнерские программы:\n\n• Образовательные учреждения\n• Корпоративные клиенты\n• Создатели контента\n• Технологические партнеры\n\nКонтакт: partners@edtech-ecosystem.ru');
+        }
+
+        // Анимация прогресс-баров
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+        }
+
+        // Запуск анимации при загрузке
+        window.addEventListener('load', () => {
+            setTimeout(animateProgressBars, 1000);
+        });
+
+        // Симуляция обновления рекомендаций
+        setInterval(() => {
+            const scores = document.querySelectorAll('.recommendation-score');
+            scores.forEach(score => {
+                const currentScore = parseInt(score.textContent);
+                const newScore = Math.max(70, Math.min(99, currentScore + Math.random() * 6 - 3));
+                score.textContent = Math.round(newScore) + '%';
+            });
+        }, 5000);
+    </script>
+</body>
+</html>
