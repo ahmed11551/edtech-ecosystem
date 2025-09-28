@@ -38,13 +38,27 @@ jobs:
           cd client
           npm run build
 
+      - name: 📁 Prepare files
+        run: |
+          # Копируем статические файлы в корень
+          cp -r nextgen-demo ./
+          cp -r 3d-demo ./
+          cp -r metaverse-worlds ./
+          cp -r neural-interface ./
+          cp -r holographic-projections ./
+          cp -r quantum-mentors ./
+          cp -r real-time-analytics ./
+          cp -r simple-server.js ./
+          cp -r ai-quantum-system.js ./
+          cp -r _redirects ./
+
       - name: 📄 Setup Pages
         uses: actions/configure-pages@v4
 
       - name: 📤 Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: client/build
+          path: .
 
   deploy:
     environment:

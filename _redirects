@@ -1,0 +1,8 @@
+# GitHub Pages redirects
+/nextgen-demo/* /nextgen-demo/index.html 200
+/3d-demo/* /3d-demo/index.html 200
+/metaverse/* /metaverse-worlds/index.html 200
+/neural/* /neural-interface/index.html 200
+/hologram/* /holographic-projections/index.html 200
+/mentors/* /quantum-mentors/index.html 200
+/analytics/* /real-time-analytics/index.html 200
